@@ -1,0 +1,11 @@
+school_suggestion_box/
+  app.py
+  templates/
+    index.html
+    suggestions.html
+  static/
+    style.css
+  data/
+    suggestions.txt
+  requirements.txt
+  .gitignore
