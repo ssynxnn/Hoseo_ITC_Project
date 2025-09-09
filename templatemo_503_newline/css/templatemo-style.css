@@ -46,14 +46,15 @@ video::-webkit-media-controls {
 }
 
 .primary-button a {
-  display: inline-block;
-  background-color: #ffbb05;
-  color: #343434;
-  font-size: 13px;
-  padding: 12px 18px;
-  border-radius: 3px;
+  background-color: gold;
+  color: black;
+  padding: 10px 20px;
   text-decoration: none;
   border: 1px solid transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  box-sizing: border-box;
 }
 
 .primary-button a:hover {
@@ -62,6 +63,7 @@ video::-webkit-media-controls {
   -moz-transition: all 0.2s linear;
   -o-transition: all 0.2s linear;
   -webkit-transition: all 0.2s linear;
+  transition: all 0.2s linear;
 }
 
 .cd-hero {
@@ -172,6 +174,7 @@ video::-webkit-media-controls {
   -moz-transition: all 0.2s linear;
   -o-transition: all 0.2s linear;
   -webkit-transition: all 0.2s linear;
+  transition: all 0.2s linear;
 }
 
 .content {
@@ -273,6 +276,7 @@ video::-webkit-media-controls {
 
 .second-slide .heading h1 {
   margin-top: 30px;
+  margin-left: 20px;
   font-size: 38px;
   text-transform: uppercase;
   color: #fff;
@@ -281,6 +285,7 @@ video::-webkit-media-controls {
 }
 
 .second-slide .heading span {
+  margin-left: 20px;
   font-size: 16px;
   text-transform: uppercase;
   color: #ffbb05;
@@ -303,23 +308,64 @@ video::-webkit-media-controls {
 
 .second-slide .right-about-text {
   text-align: left;
-  margin-left: 15px;
+  margin-left: 30px;
   margin-right: 30px;
 }
 
+.second-slide .right-about-text p {
+  font-size: 16px;
+}
+
 .second-slide .right-about-text h4 {
-  font-size: 19px;
+  font-size: 25px;
   color: #121212;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-top: 30px;
+  margin-bottom: 5px;
+}
+
+.textarea-container {
+  position: relative;
+  margin-top: 20px;
+}
+
+#suggestion-box {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid#ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.char-count {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 25px;
   margin-bottom: auto;
 }
 
-.second-slide .right-about-text .primary-button {
-  overflow: hidden;
-  margin-top: 25px;
+.primary-button-container button {
+  background-color: gold;
+  color: black;
+  padding: 10px 20px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  cursor: pointer;
   margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.primary-button-container button:hover {
+  background-color: transparent;
+  border: 1px solid #ffbb05;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  -webkit-transition: all 0.2s linear;
+  transition: all 0.2s linear;
 }
 
 
@@ -465,6 +511,7 @@ footer a {
     -moz-transition: all 0.2s linear;
     -o-transition: all 0.2s linear;
     -webkit-transition: all 0.2s linear;
+    transition: all 0.2s linear;
   }
 
   .cd-slider-nav .image-icon {

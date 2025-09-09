@@ -641,3 +641,49 @@ jQuery(document).ready(function($){
       return this;
   };
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const suggestionForm = document.getElementById('suggestion-form');
+  const suggestionBox = document.getElementById('suggestion-box');
+  const currentCharSpan = document.getElementById('current-char');
+
+  const maxLength = 500;
+
+  suggestionBox.addEventListener('input', () => {
+    const currentLength = suggestionBox.value.length;
+    currentCharSpan.textContent = currentLength;
+
+    if (currentLength > maxLength) {
+      currentCharSpan.style.color = 'red';
+    } else {
+      currentCharSpan.style.color = '#888';
+    }
+  });
+
+  suggestionForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const userSuggestion = suggestionBox.value;
+    const formData = new FormData();
+    formData.append('suggestion', userSuggestion);
+
+    fetch('send_email.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('서버 응답 오류: ' + response.status);
+      }
+      return response.text();
+    })
+    .then(result => {
+      console.log('서버 응답:', result);
+      alert('건의문이 성공적으로 전송되었습니다!');
+    })
+    .catch(error => {
+      console.error('전송 중 오류 발생:', error);
+      alert('전송에 실패했습니다. 다시 시도해 주세요.');
+    });
+  });
+});
