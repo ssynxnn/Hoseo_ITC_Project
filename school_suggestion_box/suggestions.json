@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1761398951470,
+    "studentName": "실험",
+    "studentGrade": "1학년 100반",
+    "category": "other",
+    "title": "궁금하면 한 번 이 건의를 삭제해보세요",
+    "content": "고고고\n그리고 이건 익명 없는 건의 예시",
+    "status": "pending",
+    "createdAt": "2025. 10. 25. 22:29:11",
+    "adminResponse": "",
+    "responseDate": ""
+  },
+  {
+    "id": 1761398908037,
+    "studentName": "익명",
+    "studentGrade": "",
+    "category": "other",
+    "title": "관리자는 건의를 삭제할 수 있습니다",
+    "content": "그러나 건의자는 한 번 작성한 건의를 삭제할 수 없습니다",
+    "status": "completed",
+    "createdAt": "2025. 10. 25. 22:28:28",
+    "adminResponse": "정말요?",
+    "responseDate": "2025. 10. 25. 22:29:37"
+  },
+  {
+    "id": 1761396945759,
+    "studentName": "익명",
+    "studentGrade": "",
+    "category": "food",
+    "title": "맛있는 급식을 주세요",
+    "content": "목마르다",
+    "status": "in-progress",
+    "createdAt": "2025. 10. 25. 21:55:45",
+    "adminResponse": "네",
+    "responseDate": "2025. 10. 25. 22:29:46"
+  }
+]

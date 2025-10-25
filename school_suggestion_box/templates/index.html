@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>학교 건의함 📮</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- 헤더 -->
+  <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">📮 학교 건의함</h1>
+    <div id="adminSection" class="flex items-center space-x-4">
+      <div id="adminLogin" class="flex space-x-2">
+        <input id="adminId" type="text" placeholder="관리자 ID" class="border px-2 py-1 rounded">
+        <input id="adminPw" type="password" placeholder="비밀번호" class="border px-2 py-1 rounded">
+        <button onclick="adminLogin()" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">로그인</button>
+      </div>
+      <div id="adminLogout" class="hidden">
+        <span class="text-sm text-gray-700">관리자 모드</span>
+        <button onclick="adminLogout()" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">로그아웃</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 제출 폼 -->
+  <section class="max-w-2xl mx-auto bg-white p-6 mt-6 rounded-xl shadow">
+    <h2 class="text-xl font-semibold mb-4">✏️ 건의사항 작성</h2>
+    <div class="space-y-3">
+      <input id="studentName" type="text" placeholder="이름" class="w-full border rounded px-3 py-2">
+      <input id="studentGrade" type="text" placeholder="학년 / 반" class="w-full border rounded px-3 py-2">
+      <select id="category" class="w-full border rounded px-3 py-2">
+        <option value="">-- 카테고리 선택 --</option>
+        <option value="facility">시설 개선</option>
+        <option value="restroom">학교 화장실</option>
+        <option value="food">급식 관련</option>
+        <option value="trash">쓰레기 문제</option>
+        <option value="academic">수업/학사</option>
+        <option value="activity">동아리/활동</option>
+        <option value="environment">학교 환경</option>
+        <option value="safety">안전 관련</option>
+        <option value="library">도서관</option>
+        <option value="sports">체육/운동</option>
+        <option value="other">기타</option>
+      </select>
+      <input id="title" type="text" placeholder="제목" class="w-full border rounded px-3 py-2">
+      <textarea id="content" rows="4" placeholder="내용을 입력하세요." class="w-full border rounded px-3 py-2"></textarea>
+      <label class="flex items-center space-x-2">
+        <input id="anonymous" type="checkbox" class="w-4 h-4">
+        <span>익명으로 제출</span>
+      </label>
+      <button onclick="submitSuggestion()" class="bg-green-500 text-white w-full py-2 rounded hover:bg-green-600">제출하기</button>
+    </div>
+  </section>
+
+  <!-- 필터 -->
+  <section class="max-w-6xl mx-auto mt-10 px-4">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold">📋 건의사항 목록</h2>
+      <div class="space-x-2">
+        <select id="filterCategory" class="border px-2 py-1 rounded" onchange="loadSuggestions()">
+          <option value="">전체 카테고리</option>
+          <option value="facility">시설 개선</option>
+          <option value="restroom">학교 화장실</option>
+          <option value="food">급식 관련</option>
+          <option value="trash">쓰레기 문제</option>
+          <option value="academic">수업/학사</option>
+          <option value="activity">동아리/활동</option>
+          <option value="environment">학교 환경</option>
+          <option value="safety">안전 관련</option>
+          <option value="library">도서관</option>
+          <option value="sports">체육/운동</option>
+          <option value="other">기타</option>
+        </select>
+        <select id="filterStatus" class="border px-2 py-1 rounded" onchange="loadSuggestions()">
+          <option value="">전체 상태</option>
+          <option value="pending">검토중</option>
+          <option value="in-progress">처리중</option>
+          <option value="completed">완료</option>
+        </select>
+      </div>
+    </div>
+    <div id="suggestionList" class="grid gap-4 md:grid-cols-2"></div>
+  </section>
+
+  <script>
+    async function submitSuggestion() {
+      const data = {
+        studentName: document.getElementById('studentName').value,
+        studentGrade: document.getElementById('studentGrade').value,
+        category: document.getElementById('category').value,
+        title: document.getElementById('title').value,
+        content: document.getElementById('content').value,
+        anonymous: document.getElementById('anonymous').checked
+      };
+      if (!data.title || !data.content || !data.category) {
+        alert('제목, 내용, 카테고리를 모두 입력하세요.');
+        return;
+      }
+      const res = await axios.post('/submit_suggestion', data);
+      if (res.data.success) {
+        alert('건의사항이 제출되었습니다.');
+        document.querySelectorAll('input, textarea').forEach(i => i.value = '');
+        document.getElementById('anonymous').checked = false;
+        loadSuggestions();
+      }
+    }
+
+    async function loadSuggestions() {
+      const category = document.getElementById('filterCategory').value;
+      const status = document.getElementById('filterStatus').value;
+      const res = await axios.get('/get_suggestions', { params: { category, status } });
+      const list = document.getElementById('suggestionList');
+      list.innerHTML = '';
+
+      res.data.forEach(s => {
+        const div = document.createElement('div');
+        div.className = 'bg-white p-4 rounded-xl shadow relative';
+        div.innerHTML = `
+          <h3 class="text-lg font-semibold mb-1">${s.title}</h3>
+          <p class="text-sm text-gray-600 mb-2">${s.content}</p>
+          <p class="text-xs text-gray-500">${s.studentName} ${s.studentGrade}</p>
+          <span class="text-xs inline-block mt-2 px-2 py-1 rounded bg-yellow-100 text-yellow-800">${s.status}</span>
+          ${s.adminResponse ? `<div class="mt-3 border-t pt-2 text-sm"><strong>관리자 답변:</strong> ${s.adminResponse}</div>` : ''}
+          ${isAdmin ? `
+            <div class="mt-2 border-t pt-2 space-y-2">
+              <textarea id="response-${s.id}" class="border w-full rounded px-2 py-1" placeholder="답변 작성...">${s.adminResponse || ''}</textarea>
+              <select id="status-${s.id}" class="border rounded px-2 py-1 w-full">
+                <option value="pending" ${s.status === 'pending' ? 'selected' : ''}>검토중</option>
+                <option value="in-progress" ${s.status === 'in-progress' ? 'selected' : ''}>처리중</option>
+                <option value="completed" ${s.status === 'completed' ? 'selected' : ''}>완료</option>
+              </select>
+              <button onclick="updateSuggestion(${s.id})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 w-full">저장</button>
+              <button onclick="deleteSuggestion(${s.id})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 w-full">삭제</button>
+            </div>` : ''}
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    async function updateSuggestion(id) {
+      const response = document.getElementById(`response-${id}`).value;
+      const status = document.getElementById(`status-${id}`).value;
+      const res = await axios.post('/admin_response', { suggestionId: id, response, status });
+      if (res.data.success) {
+        alert('업데이트 완료!');
+        loadSuggestions();
+      }
+    }
+
+    async function deleteSuggestion(id) {
+      if (!confirm('정말 이 건의사항을 삭제하시겠습니까?')) {
+        return;
+      }
+      const res = await axios.post('/delete_suggestion', { suggestionId: id });
+      if (res.data.success) {
+        alert('삭제되었습니다.');
+        loadSuggestions();
+      } else {
+        alert(res.data.message);
+      }
+    }
+
+    async function adminLogin() {
+      const adminId = document.getElementById('adminId').value;
+      const password = document.getElementById('adminPw').value;
+      const res = await axios.post('/admin_login', { adminId, password });
+      if (res.data.success) {
+        alert('관리자 로그인 성공!');
+        isAdmin = true;
+        document.getElementById('adminLogin').classList.add('hidden');
+        document.getElementById('adminLogout').classList.remove('hidden');
+        loadSuggestions();
+      } else {
+        alert(res.data.message);
+      }
+    }
+
+    async function adminLogout() {
+      await axios.post('/admin_logout');
+      isAdmin = false;
+      document.getElementById('adminLogin').classList.remove('hidden');
+      document.getElementById('adminLogout').classList.add('hidden');
+      loadSuggestions();
+    }
+
+    let isAdmin = false;
+    loadSuggestions();
+  </script>
+
+</body>
+</html>
